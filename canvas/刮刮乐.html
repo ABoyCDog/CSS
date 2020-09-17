@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      img {
+        width: 800px;
+        height: 600px;
+        position: absolute;
+        top: 10%;
+        left: 30%;
+      }
+      canvas {
+        width: 800px;
+        height: 600px;
+        position: absolute;
+        top: 10%;
+        left: 30%;
+        border: 1px solid #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <img id="img" src="./images/1.png" alt="RICK And MORTY" />
+      <canvas id="canvas" width="800" height="600"></canvas>
+    </div>
+    <script>
+      var cas = document.getElementById('canvas')
+      var ctx = cas.getContext('2d')
+      var img = document.getElementById('img')
+
+      // 加一个遮罩层
+      ctx.fillStyle = '#ccc'
+      ctx.fillRect(0, 0, cas.width, cas.height)
+      setImgUrl()
+
+      // 开关
+      var isClear = false
+      cas.addEventListener('mousedown', function() {
+        isClear = true
+      })
+      cas.addEventListener('mousemove', function(e) {
+        if(!isClear) return
+        var x = e.offsetX
+        var y = e.offsetY
+        ctx.clearRect(x, y, 20, 20)
+      })
+      cas.addEventListener('mouseup', function() {
+        isClear = false
+      })
+
+      function setImgUrl() {
+        var arr = ['./images/1.png','./images/2.png','./images/3.png','./images/4.png']
+        var random = Math.round(Math.random()*3)
+        img.src = arr[random]
+      }
+    </script>
+  </body>
+</html>
