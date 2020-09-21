@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>绘制动态线</title>
+    <style>
+      div {
+        width: 1226px;
+        height: 976px;
+        background-image: url('./images/login_img.png');
+        background-repeat: no-repeat;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="div">
+      <canvas id="canvas"></canvas>
+    </div>
+    <script>
+      var canvas = document.getElementById('canvas')
+      var ctx = canvas.getContext('2d')
+      var canvasWidth = canvas.width = 1226
+      var canvasHeight = canvas.height = 976
+      var startPos = {x: 986, y: 550}
+      var mediumPos = {x: 608, y: 778}
+      var endPos = {x: 200, y: 535}
+      var count = 1
+
+      // 画前半段
+      function draw1(ctx, pos) {
+        count++
+
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+        ctx.beginPath()
+        ctx.strokeStyle = 'red'
+        ctx.lineWidth = 5
+        ctx.setLineDash([8, 8])
+        ctx.moveTo(startPos.x, startPos.y)
+        ctx.lineTo(pos[0].x, pos[0].y)
+        ctx.stroke()
+        ctx.closePath()
+      }
+      // 画后半段
+      function draw2(ctx, pos) {
+        count++
+
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+        ctx.beginPath()
+        ctx.strokeStyle = 'red'
+        ctx.lineWidth = 5
+        ctx.setLineDash([8, 8])
+        ctx.moveTo(startPos.x, startPos.y)
+        ctx.lineTo(mediumPos.x, mediumPos.y)
+        ctx.lineTo(pos[0].x, pos[0].y)
+        ctx.stroke()
+        ctx.closePath()
+      }
+
+      var render = function() {
+        // 判断条件
+        // if(count === 189) count = 1 // 这里实现前半段循环
+        // 两段循环
+        if(count === 393) count = 1
+
+        // 前半段
+        if(count < 189) {
+          let count1 = count
+          var x1 = 2 * count1 * (778 - 550) / (986 - 608)
+          let  pos = [{x: startPos.x - 2 * count1, y: startPos.y + x1}]
+          draw1(ctx, pos)
+        } else { // 后半段
+          let count2 = count - 188
+          var x2 = 2 * count2 * (778 - 535) / (608 - 200)
+          let  pos = [{x: mediumPos.x - 2 * count2, y: mediumPos.y - x2}]
+          draw2(ctx, pos)
+        }
+
+        requestAnimationFrame(render)
+      }
+      render()
+      
+    </script>
+  </body>
+</html>
