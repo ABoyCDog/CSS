@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>绘制动态图</title>
+    <style>
+      div {
+        width: 1226px;
+        height: 976px;
+        background-image: url('./images/login_img.png');
+        background-repeat: no-repeat;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="div">
+      <canvas id="canvas"></canvas>
+    </div>
+    <script>
+      var canvas = document.getElementById('canvas')
+      var ctx = canvas.getContext('2d')
+      var canvasWidth = canvas.width = 1226
+      var canvasHeight = canvas.height = 976
+   
+      var img = new Image()
+      img.src = './images/Marker.png'
+      img.width = 64
+      img.height = 64
+      
+      var x = 200, y = 536
+      var flag = true
+      img.onload = function() {
+        var renderImg = function() {
+          // 执行drawImage语句
+          ctx.clearRect(0,0,canvasWidth,canvasHeight)
+
+          if(y === 400) {
+            y += 1
+            flag = false
+          }
+          if(y === 536) {
+            y -= 1
+            flag = true
+          }
+          if(flag) y -= 1
+          else y += 1
+          ctx.drawImage(img, x, y)
+
+          requestAnimationFrame(renderImg)
+        }
+        renderImg()
+      }
+      
+    </script>
+  </body>
+</html>

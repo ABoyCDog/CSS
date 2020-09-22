@@ -3,15 +3,50 @@
   <head>
     <title>画笔</title>
     <style>
-
+      div {
+        display: flex;
+        justify-content: center;
+        flex-flow: row wrap;
+        transform: translateY(30%);
+      }
+      #canvas {
+        border: 1px solid gray;
+      }
     </style>
   </head>
   <body>
     <div>
-
+      <h3>画笔</h3>
+      <canvas id="canvas" width="600" height="500"></canvas>
     </div>
     <script>
+      var cas = document.querySelector('canvas')
+      var ctx = cas.getContext('2d')
 
+      var isDraw = false
+      // 鼠标按下事件
+      cas.addEventListener('mousedown', function () {
+        isDraw = true
+        ctx.beginPath()
+      })
+
+      // 鼠标移动事件
+      cas.addEventListener('mousemove', function (e) {
+        if (!isDraw) {
+          // 没有按下
+          return
+        }
+        // 获取相对于容器内的坐标
+        var x = e.offsetX
+        var y = e.offsetY
+        ctx.lineTo(x, y)
+        ctx.stroke()
+      })
+
+      cas.addEventListener('mouseup', function () {
+        // 关闭开关了!
+        isDraw = false
+      })
     </script>
   </body>
 </html>

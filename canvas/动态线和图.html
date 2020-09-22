@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>绘制动态线</title>
+    <title>绘制动态线和图</title>
     <style>
       div {
         width: 1226px;
@@ -9,11 +9,17 @@
         background-image: url('./images/login_img.png');
         background-repeat: no-repeat;
       }
+      #canvasImg {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
     </style>
   </head>
   <body>
     <div class="div">
       <canvas id="canvas"></canvas>
+      <canvas id="canvasImg"></canvas>
     </div>
     <script>
       // 画线
@@ -78,6 +84,40 @@
         requestAnimationFrame(renderLine)
       }
       renderLine()
+
+      // 图片移动
+      var canvasImg = document.getElementById('canvasImg')
+      var ctxImg = canvasImg.getContext('2d')
+      var canvasImgWidth = canvasImg.width = 1226
+      var canvasImgHeight = canvasImg.height = 976
+
+      var img = new Image()
+      img.src = './images/marker-red.png'
+      img.width = 64
+      img.height = 64
+      
+      var x = 145, y = 426
+      var flag = true
+      img.onload = function() {
+        var renderImg = function() {
+          ctxImg.clearRect(0,0,canvasImgWidth,canvasImgHeight)
+
+          if(y === 360) {
+            y += 1
+            flag = false
+          }
+          if(y === 426) {
+            y -= 1
+            flag = true
+          }
+          if(flag) y -= 1
+          else y += 1
+          ctxImg.drawImage(img, x, y)
+
+          requestAnimationFrame(renderImg)
+        }
+        renderImg()
+      }
       
     </script>
   </body>
