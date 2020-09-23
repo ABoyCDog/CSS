@@ -40,4 +40,42 @@
     }
   ```
 
-## 3、
+## 3、画扩散圆
+
++ 实现原理
+  通过不断的改变圆的半径大小，不断重叠达到运动的效果，在运动的过程中，设置当前canvas的透明度context.globalAlpha=0.95，使得canvas上的圆逐渐透明直至为0，从而实现这种扩散、渐变的效果。
+  ```js
+    // 画动态圆
+    var radius = 0
+    function drawCircle() {
+        ctx.beginPath();
+        ctx.arc(200, 535, radius, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.lineWidth = 2;
+        ctx.setLineDash([0, 0])
+        ctx.strokeStyle = 'red'
+        ctx.stroke();
+
+        radius += 0.3;
+        if (radius > 66) {
+            radius = 0;
+        }
+    }
+    var render = function() {
+      var prev = ctx.globalCompositeOperation;
+      ctx.globalCompositeOperation = 'destination-in';
+      ctx.globalAlpha = 0.95;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = prev;
+      drawCircle();
+
+      requestAnimationFrame(render)
+    }
+    render()
+  ```
+
++ 
+
+## 4、画椭圆
+
++ 使用 `ellipse` 方法替代上述画圆的 `arc` 即可，详见 [传送门](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/ellipse)

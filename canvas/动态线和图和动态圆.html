@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>绘制动态线和图和动态圆</title>
+    <style>
+      div {
+        width: 1226px;
+        height: 976px;
+        background-image: url('./images/login_img.png');
+        background-repeat: no-repeat;
+      }
+      #canvasImg {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="div">
+      <canvas id="canvas"></canvas>
+      <canvas id="canvasImg"></canvas>
+    </div>
+    <script>
+      // 画线
+      var canvas = document.getElementById('canvas')
+      var ctx = canvas.getContext('2d')
+      var canvasWidth = canvas.width = 1226
+      var canvasHeight = canvas.height = 976
+      var startPos = {x: 986, y: 550}
+      var carPos1 = {x: 855, y: 630}
+      var carPos2 = {x: 718, y: 709}
+      var mediumPos = {x: 608, y: 778}
+      var endPos = {x: 200, y: 535}
+      var count = 1
+
+      // 画前半段1
+      function draw1(ctx, pos) {
+        count++
+        // ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+
+        ctx.beginPath()
+        ctx.strokeStyle = 'red'
+        ctx.lineWidth = 5
+        ctx.setLineDash([8, 8])
+        ctx.moveTo(startPos.x, startPos.y)
+        ctx.lineTo(pos[0].x, pos[0].y)
+        ctx.stroke()
+        ctx.closePath()
+      }
+      // 画前半段2
+      function draw2(ctx, pos) {
+        count++
+        // ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+
+        ctx.beginPath()
+        ctx.strokeStyle = 'red'
+        ctx.lineWidth = 5
+        ctx.setLineDash([8, 8])
+        ctx.moveTo(startPos.x, startPos.y)
+        ctx.lineTo(carPos1.x, carPos1.y)
+        ctx.stroke()
+        ctx.closePath()
+
+        ctx.beginPath()
+        ctx.strokeStyle = 'red'
+        ctx.lineWidth = 5
+        ctx.setLineDash([8, 8])
+        ctx.moveTo(carPos2.x, carPos2.y)
+        ctx.lineTo(pos[0].x, pos[0].y)
+        ctx.stroke()
+        ctx.closePath()
+      }
+      // 画后半段
+      function draw3(ctx, pos) {
+        count++
+        // ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+
+        ctx.beginPath()
+        ctx.strokeStyle = 'red'
+        ctx.lineWidth = 5
+        ctx.setLineDash([8, 8])
+        ctx.moveTo(startPos.x, startPos.y)
+        ctx.lineTo(carPos1.x, carPos1.y)
+        ctx.stroke()
+        ctx.closePath()
+
+        ctx.beginPath()
+        ctx.strokeStyle = 'red'
+        ctx.lineWidth = 5
+        ctx.setLineDash([8, 8])
+        ctx.moveTo(carPos2.x, carPos2.y)
+        ctx.lineTo(mediumPos.x, mediumPos.y)
+        ctx.stroke()
+        ctx.closePath()
+
+        ctx.beginPath()
+        ctx.strokeStyle = 'red'
+        ctx.lineWidth = 5
+        ctx.setLineDash([8, 8])
+        ctx.moveTo(mediumPos.x, mediumPos.y)
+        ctx.lineTo(pos[0].x, pos[0].y)
+        ctx.stroke()
+        ctx.closePath()
+      }
+
+      // 画动态圆
+      // var radius = 0
+      var radiusX = 0 // 长半径
+      var radiusY = 0 // 短半径
+      function drawCircle() {
+          ctx.beginPath();
+          // ctx.arc(200, 535, radius, 0, Math.PI * 2); // 圆
+          ctx.ellipse(200, 540, radiusX, radiusY, Math.PI/180, 0, Math.PI * 2) // 椭圆
+          ctx.closePath();
+          ctx.lineWidth = 2;
+          ctx.setLineDash([0, 0])
+          ctx.strokeStyle = 'red'
+          ctx.stroke();
+
+          // radius += 0.3;
+          // if (radius > 60) {
+          //     radius = 0;
+          // }
+          radiusX += 0.3
+          radiusY += 0.2
+          if(radiusX > 66) {
+            radiusX = 0
+            radiusY = 0
+          }
+      }
+
+      var renderLineAndCircle = function() {
+        // 判断条件
+        // 跳过车
+        if(count === 70) count = 130
+        // 到达终点后循环
+        if(count === 393) count = 1
+
+        // 前半段
+        if(count < 70) {
+          let count1 = count
+          let x1 = 2 * count1 * (778 - 550) / (986 - 608)
+          let  pos = [{x: startPos.x - 2 * count1, y: startPos.y + x1}]
+          draw1(ctx, pos)
+        }
+        if(count > 109 && count < 189) {
+          let count2 = count
+          let x1 = 2 * count2 * (778 - 550) / (986 - 608)
+          let  pos = [{x: startPos.x - 2 * count2, y: startPos.y + x1}]
+          draw2(ctx, pos)
+        }
+        if(count >= 189) {
+          let count3 = count - 188
+          let x2 = 2 * count3 * (778 - 535) / (608 - 200)
+          let  pos = [{x: mediumPos.x - 2 * count3, y: mediumPos.y - x2}]
+          draw3(ctx, pos)
+        }
+
+        // 画圆
+        var prev = ctx.globalCompositeOperation;
+        ctx.globalCompositeOperation = 'destination-in';
+        ctx.globalAlpha = 0.95;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.globalCompositeOperation = prev;
+        drawCircle();
+
+        requestAnimationFrame(renderLineAndCircle)
+      }
+      renderLineAndCircle()
+
+      // 图片移动
+      var canvasImg = document.getElementById('canvasImg')
+      var ctxImg = canvasImg.getContext('2d')
+      var canvasImgWidth = canvasImg.width = 1226
+      var canvasImgHeight = canvasImg.height = 976
+
+      var img = new Image()
+      img.src = './images/marker-red.png'
+      img.width = 64
+      img.height = 64
+      
+      var x = 145, y = 426
+      var flag = true
+      img.onload = function() {
+        var renderImg = function() {
+          ctxImg.clearRect(0,0,canvasImgWidth,canvasImgHeight)
+
+          if(y === 360) {
+            y += 1
+            flag = false
+          }
+          if(y === 426) {
+            y -= 1
+            flag = true
+          }
+          if(flag) y -= 1
+          else y += 1
+          ctxImg.drawImage(img, x, y)
+
+          requestAnimationFrame(renderImg)
+        }
+        renderImg()
+      }
+
+      // 动态圆
+      
+    </script>
+  </body>
+</html>

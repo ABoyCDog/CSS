@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>扩散圆</title>
+    <style>
+      * {
+        margin:0;
+        padding:0;
+      }
+      div {
+        display: flex;
+        justify-content: center;
+        transform: translateY(7%);
+      }
+      #canvas {
+        border: 1px solid gray;
+        background:rgb(105, 125, 238)
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <canvas id="canvas"></canvas>
+    </div>
+    <script>
+       window.onload = function() {
+          var canvas = document.getElementById('canvas');
+          var ctx = canvas.getContext('2d');
+
+          canvas.width = 700;
+          canvas.height = 700;
+
+          // var radius = 0;
+          var radiusX = 0
+          var radiusY = 0
+
+          function drawCircle() {
+              ctx.beginPath();
+              // ctx.arc(100, 100, radius, 0, Math.PI * 2);
+              ctx.ellipse(200, 540, radiusX, radiusY, Math.PI/180, 0, Math.PI * 2)
+              ctx.closePath();
+              ctx.lineWidth = 2;
+              // ctx.strokeStyle = 'rgba(255,255,50,1)';
+              ctx.strokeStyle = 'red'
+              ctx.stroke();
+
+              // radius += 0.5;
+              // if (radius > 30) {
+              //     radius = 0;
+              // }
+              radiusX += 0.3
+              radiusY += 0.2
+              if(radiusX > 66) {
+                radiusX = 0
+                radiusY = 0
+              }
+          }
+
+          var render = function() {
+              var prev = ctx.globalCompositeOperation;
+              ctx.globalCompositeOperation = 'destination-in';
+              ctx.globalAlpha = 0.95;
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              ctx.globalCompositeOperation = prev;
+              drawCircle();
+
+              requestAnimationFrame(render)
+          };
+          render()
+
+      }
+    </script>
+  </body>
+</html>

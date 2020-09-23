@@ -30,7 +30,7 @@
       function draw1(ctx, pos) {
         count++
 
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+        // ctx.clearRect(0, 0, canvasWidth, canvasHeight)
         ctx.beginPath()
         ctx.strokeStyle = 'red'
         ctx.lineWidth = 5
@@ -44,7 +44,7 @@
       function draw2(ctx, pos) {
         count++
 
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+        // ctx.clearRect(0, 0, canvasWidth, canvasHeight)
         ctx.beginPath()
         ctx.strokeStyle = 'red'
         ctx.lineWidth = 5
@@ -75,9 +75,43 @@
           draw2(ctx, pos)
         }
 
+        // 画圆
+        var prev = ctx.globalCompositeOperation;
+        ctx.globalCompositeOperation = 'destination-in';
+        ctx.globalAlpha = 0.95;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.globalCompositeOperation = prev;
+        drawCircle();
+
         requestAnimationFrame(renderLine)
       }
       renderLine()
+
+      // 画动态圆
+      var radius = 0
+      var radiusX = 0
+      var radiusY = 0
+      function drawCircle() {
+          ctx.beginPath();
+          // ctx.arc(200, 535, radius, 0, Math.PI * 2);
+          ctx.ellipse(200, 540, radiusX, radiusY, Math.PI/180, 0, Math.PI * 2)
+          ctx.closePath();
+          ctx.lineWidth = 2;
+          ctx.setLineDash([0, 0])
+          ctx.strokeStyle = 'red'
+          ctx.stroke();
+
+          // radius += 0.3;
+          // if (radius > 66) {
+          //     radius = 0;
+          // }
+          radiusX += 0.3
+          radiusY += 0.2
+          if(radiusX > 66) {
+            radiusX = 0
+            radiusY = 0
+          }
+      }
       
     </script>
   </body>
