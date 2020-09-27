@@ -22,22 +22,22 @@
       var canvasHeight = canvas.height = 976
    
       var img = new Image()
-      img.src = './images/Marker.png'
+      img.src = './images/marker-red.png'
       img.width = 64
       img.height = 64
       
-      var x = 200, y = 536
+      var x = 140, y = 336
       var flag = true
       img.onload = function() {
         var renderImg = function() {
           // 执行drawImage语句
           ctx.clearRect(0,0,canvasWidth,canvasHeight)
 
-          if(y === 400) {
+          if(y === 300) {
             y += 1
             flag = false
           }
-          if(y === 536) {
+          if(y === 406) {
             y -= 1
             flag = true
           }

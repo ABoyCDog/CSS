@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>flex- 自适应布局</title>
+<style type="text/css" media="screen">
+*{
+margin: 0;
+padding: 0;
+}
+body {
+height: 100%;
+width: 100%;
+overflow: hidden;
+background: gray;
+background-size: 100% 100%;
+font-size: 36px;
+transform-origin: left top;
+}
+.wrap {
+flex: 1;
+display: flex;
+align-items: center;
+}
+.wrap div {
+flex: 1 1 0;
+}
+.foot {
+background: #fff;
+}
+/* 内容区域充满全屏，flex布局，纵向排列*/
+.content {
+display: flex;
+display: -webkit-flex;
+position: absolute;
+left: 0;
+top: 0;
+flex-direction: column;
+justify-content: center;
+width: 100%;
+height: 100%;
+min-height: 100vh;
+visibility: visible;
+text-align: center;
+/*  background-image: url(state.png);
+*  background-size: 100% 100%;
+*  background-position: left top;
+*/
+}
+</style>
+<script src="jquery-1.11.3.min.js"></script>
+</head>
+<body>
+<div class="content">
+<div class="top">
+this is a header
+</div>
+<div class="wrap">
+<div class="left">left</div>
+<div class="middle">middle</div>
+<div class="right">right</div>
+</div>
+<div class="foot">
+this is a foot
+</div>
+</div>
+<script>
+window.onresize = function () {
+/*  获取文档宽高与分辨率之间的比例，确定body的transform：scale的数值 */
+
+        var ratioX = $(window).width()/window.screen.width;
+       var ratioY = $(window).height()/window.screen.height;
+window.screen.width && $('body').css('width', window.screen.width);
+        window.screen.height && $('body').css('height', window.screen.height);
+         $('head').append('<meta name="viewport" content="width='+window.screen.width+'"/>');
+/* 设定body的transform:scale 属性 */
+        $("body").css({
+        transform: "scale("+ratioX+", "+ratioY+")"
+        })
+}
+   onresize();
+</script>
+</body>
+</html>
